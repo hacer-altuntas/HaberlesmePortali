@@ -1,0 +1,409 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Alicilar">
+          <Key>
+            <PropertyRef Name="AliciId" />
+          </Key>
+          <Property Name="AliciId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KullaniciId" Type="int" />
+          <Property Name="MesajId" Type="int" />
+        </EntityType>
+        <EntityType Name="Grup">
+          <Key>
+            <PropertyRef Name="GrupId" />
+          </Key>
+          <Property Name="GrupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GrupAdi" Type="nvarchar" MaxLength="150" />
+          <Property Name="Hakkinda" Type="nvarchar" MaxLength="350" />
+          <Property Name="GrupResim" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="GrupUye">
+          <Key>
+            <PropertyRef Name="UyeId" />
+          </Key>
+          <Property Name="UyeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KullaniciId" Type="int" />
+          <Property Name="GrupId" Type="int" />
+          <Property Name="UyeYetki" Type="int" />
+        </EntityType>
+        <EntityType Name="Kullanici">
+          <Key>
+            <PropertyRef Name="KullaniciId" />
+          </Key>
+          <Property Name="KullaniciId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KullaniciAdi" Type="nvarchar" MaxLength="70" />
+          <Property Name="Resim" Type="nvarchar" MaxLength="150" />
+          <Property Name="Numara" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Durum" Type="nvarchar" MaxLength="250" />
+          <Property Name="KayitTarihi" Type="date" />
+        </EntityType>
+        <EntityType Name="Mesaj">
+          <Key>
+            <PropertyRef Name="MesajId" />
+          </Key>
+          <Property Name="MesajId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="İcerik" Type="nvarchar" MaxLength="550" />
+          <Property Name="GonderenId" Type="int" />
+          <Property Name="GrupId" Type="int" />
+          <Property Name="Tarih" Type="date" />
+          <Property Name="Okunma" Type="int" />
+        </EntityType>
+        <Association Name="FK_Alicilar_mesaj">
+          <End Role="Mesaj" Type="Self.Mesaj" Multiplicity="0..1" />
+          <End Role="Alicilar" Type="Self.Alicilar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mesaj">
+              <PropertyRef Name="MesajId" />
+            </Principal>
+            <Dependent Role="Alicilar">
+              <PropertyRef Name="MesajId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GrupUye_Grup">
+          <End Role="Grup" Type="Self.Grup" Multiplicity="0..1" />
+          <End Role="GrupUye" Type="Self.GrupUye" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grup">
+              <PropertyRef Name="GrupId" />
+            </Principal>
+            <Dependent Role="GrupUye">
+              <PropertyRef Name="GrupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GrupUye_UyeKullanici">
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="0..1" />
+          <End Role="GrupUye" Type="Self.GrupUye" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kullanici">
+              <PropertyRef Name="KullaniciId" />
+            </Principal>
+            <Dependent Role="GrupUye">
+              <PropertyRef Name="KullaniciId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mesaj_Gonderen">
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="0..1" />
+          <End Role="Mesaj" Type="Self.Mesaj" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kullanici">
+              <PropertyRef Name="KullaniciId" />
+            </Principal>
+            <Dependent Role="Mesaj">
+              <PropertyRef Name="GonderenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mesaj_Grup">
+          <End Role="Grup" Type="Self.Grup" Multiplicity="0..1" />
+          <End Role="Mesaj" Type="Self.Mesaj" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grup">
+              <PropertyRef Name="GrupId" />
+            </Principal>
+            <Dependent Role="Mesaj">
+              <PropertyRef Name="GrupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Table_alicilar">
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="0..1" />
+          <End Role="Alicilar" Type="Self.Alicilar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kullanici">
+              <PropertyRef Name="KullaniciId" />
+            </Principal>
+            <Dependent Role="Alicilar">
+              <PropertyRef Name="KullaniciId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBModelStoreContainer">
+          <EntitySet Name="Alicilar" EntityType="Self.Alicilar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Grup" EntityType="Self.Grup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GrupUye" EntityType="Self.GrupUye" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kullanici" EntityType="Self.Kullanici" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mesaj" EntityType="Self.Mesaj" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Alicilar_mesaj" Association="Self.FK_Alicilar_mesaj">
+            <End Role="Mesaj" EntitySet="Mesaj" />
+            <End Role="Alicilar" EntitySet="Alicilar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GrupUye_Grup" Association="Self.FK_GrupUye_Grup">
+            <End Role="Grup" EntitySet="Grup" />
+            <End Role="GrupUye" EntitySet="GrupUye" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GrupUye_UyeKullanici" Association="Self.FK_GrupUye_UyeKullanici">
+            <End Role="Kullanici" EntitySet="Kullanici" />
+            <End Role="GrupUye" EntitySet="GrupUye" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mesaj_Gonderen" Association="Self.FK_Mesaj_Gonderen">
+            <End Role="Kullanici" EntitySet="Kullanici" />
+            <End Role="Mesaj" EntitySet="Mesaj" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mesaj_Grup" Association="Self.FK_Mesaj_Grup">
+            <End Role="Grup" EntitySet="Grup" />
+            <End Role="Mesaj" EntitySet="Mesaj" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Table_alicilar" Association="Self.FK_Table_alicilar">
+            <End Role="Kullanici" EntitySet="Kullanici" />
+            <End Role="Alicilar" EntitySet="Alicilar" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Alicilar">
+          <Key>
+            <PropertyRef Name="AliciId" />
+          </Key>
+          <Property Name="AliciId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KullaniciId" Type="Int32" />
+          <Property Name="MesajId" Type="Int32" />
+          <NavigationProperty Name="Mesaj" Relationship="Self.FK_Alicilar_mesaj" FromRole="Alicilar" ToRole="Mesaj" />
+          <NavigationProperty Name="Kullanici" Relationship="Self.FK_Table_alicilar" FromRole="Alicilar" ToRole="Kullanici" />
+        </EntityType>
+        <EntityType Name="Grup">
+          <Key>
+            <PropertyRef Name="GrupId" />
+          </Key>
+          <Property Name="GrupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GrupAdi" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Hakkinda" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="GrupResim" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="GrupUye" Relationship="Self.FK_GrupUye_Grup" FromRole="Grup" ToRole="GrupUye" />
+          <NavigationProperty Name="Mesaj" Relationship="Self.FK_Mesaj_Grup" FromRole="Grup" ToRole="Mesaj" />
+        </EntityType>
+        <EntityType Name="GrupUye">
+          <Key>
+            <PropertyRef Name="UyeId" />
+          </Key>
+          <Property Name="UyeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KullaniciId" Type="Int32" />
+          <Property Name="GrupId" Type="Int32" />
+          <Property Name="UyeYetki" Type="Int32" />
+          <NavigationProperty Name="Grup" Relationship="Self.FK_GrupUye_Grup" FromRole="GrupUye" ToRole="Grup" />
+          <NavigationProperty Name="Kullanici" Relationship="Self.FK_GrupUye_UyeKullanici" FromRole="GrupUye" ToRole="Kullanici" />
+        </EntityType>
+        <EntityType Name="Kullanici">
+          <Key>
+            <PropertyRef Name="KullaniciId" />
+          </Key>
+          <Property Name="KullaniciId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KullaniciAdi" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+          <Property Name="Resim" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Numara" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Durum" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="KayitTarihi" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Alicilar" Relationship="Self.FK_Table_alicilar" FromRole="Kullanici" ToRole="Alicilar" />
+          <NavigationProperty Name="GrupUye" Relationship="Self.FK_GrupUye_UyeKullanici" FromRole="Kullanici" ToRole="GrupUye" />
+          <NavigationProperty Name="Mesaj" Relationship="Self.FK_Mesaj_Gonderen" FromRole="Kullanici" ToRole="Mesaj" />
+        </EntityType>
+        <EntityType Name="Mesaj">
+          <Key>
+            <PropertyRef Name="MesajId" />
+          </Key>
+          <Property Name="MesajId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="İcerik" Type="String" MaxLength="550" FixedLength="false" Unicode="true" />
+          <Property Name="GonderenId" Type="Int32" />
+          <Property Name="GrupId" Type="Int32" />
+          <Property Name="Tarih" Type="DateTime" Precision="0" />
+          <Property Name="Okunma" Type="Int32" />
+          <NavigationProperty Name="Alicilar" Relationship="Self.FK_Alicilar_mesaj" FromRole="Mesaj" ToRole="Alicilar" />
+          <NavigationProperty Name="Grup" Relationship="Self.FK_Mesaj_Grup" FromRole="Mesaj" ToRole="Grup" />
+          <NavigationProperty Name="Kullanici" Relationship="Self.FK_Mesaj_Gonderen" FromRole="Mesaj" ToRole="Kullanici" />
+        </EntityType>
+        <Association Name="FK_Alicilar_mesaj">
+          <End Role="Mesaj" Type="Self.Mesaj" Multiplicity="0..1" />
+          <End Role="Alicilar" Type="Self.Alicilar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Mesaj">
+              <PropertyRef Name="MesajId" />
+            </Principal>
+            <Dependent Role="Alicilar">
+              <PropertyRef Name="MesajId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Table_alicilar">
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="0..1" />
+          <End Role="Alicilar" Type="Self.Alicilar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kullanici">
+              <PropertyRef Name="KullaniciId" />
+            </Principal>
+            <Dependent Role="Alicilar">
+              <PropertyRef Name="KullaniciId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GrupUye_Grup">
+          <End Role="Grup" Type="Self.Grup" Multiplicity="0..1" />
+          <End Role="GrupUye" Type="Self.GrupUye" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grup">
+              <PropertyRef Name="GrupId" />
+            </Principal>
+            <Dependent Role="GrupUye">
+              <PropertyRef Name="GrupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mesaj_Grup">
+          <End Role="Grup" Type="Self.Grup" Multiplicity="0..1" />
+          <End Role="Mesaj" Type="Self.Mesaj" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grup">
+              <PropertyRef Name="GrupId" />
+            </Principal>
+            <Dependent Role="Mesaj">
+              <PropertyRef Name="GrupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GrupUye_UyeKullanici">
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="0..1" />
+          <End Role="GrupUye" Type="Self.GrupUye" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kullanici">
+              <PropertyRef Name="KullaniciId" />
+            </Principal>
+            <Dependent Role="GrupUye">
+              <PropertyRef Name="KullaniciId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mesaj_Gonderen">
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="0..1" />
+          <End Role="Mesaj" Type="Self.Mesaj" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kullanici">
+              <PropertyRef Name="KullaniciId" />
+            </Principal>
+            <Dependent Role="Mesaj">
+              <PropertyRef Name="GonderenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Alicilar" EntityType="Self.Alicilar" />
+          <EntitySet Name="Grup" EntityType="Self.Grup" />
+          <EntitySet Name="GrupUye" EntityType="Self.GrupUye" />
+          <EntitySet Name="Kullanici" EntityType="Self.Kullanici" />
+          <EntitySet Name="Mesaj" EntityType="Self.Mesaj" />
+          <AssociationSet Name="FK_Alicilar_mesaj" Association="Self.FK_Alicilar_mesaj">
+            <End Role="Mesaj" EntitySet="Mesaj" />
+            <End Role="Alicilar" EntitySet="Alicilar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Table_alicilar" Association="Self.FK_Table_alicilar">
+            <End Role="Kullanici" EntitySet="Kullanici" />
+            <End Role="Alicilar" EntitySet="Alicilar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GrupUye_Grup" Association="Self.FK_GrupUye_Grup">
+            <End Role="Grup" EntitySet="Grup" />
+            <End Role="GrupUye" EntitySet="GrupUye" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mesaj_Grup" Association="Self.FK_Mesaj_Grup">
+            <End Role="Grup" EntitySet="Grup" />
+            <End Role="Mesaj" EntitySet="Mesaj" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GrupUye_UyeKullanici" Association="Self.FK_GrupUye_UyeKullanici">
+            <End Role="Kullanici" EntitySet="Kullanici" />
+            <End Role="GrupUye" EntitySet="GrupUye" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mesaj_Gonderen" Association="Self.FK_Mesaj_Gonderen">
+            <End Role="Kullanici" EntitySet="Kullanici" />
+            <End Role="Mesaj" EntitySet="Mesaj" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBModelStoreContainer" CdmEntityContainer="DBEntities">
+          <EntitySetMapping Name="Alicilar">
+            <EntityTypeMapping TypeName="DBModel.Alicilar">
+              <MappingFragment StoreEntitySet="Alicilar">
+                <ScalarProperty Name="AliciId" ColumnName="AliciId" />
+                <ScalarProperty Name="KullaniciId" ColumnName="KullaniciId" />
+                <ScalarProperty Name="MesajId" ColumnName="MesajId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Grup">
+            <EntityTypeMapping TypeName="DBModel.Grup">
+              <MappingFragment StoreEntitySet="Grup">
+                <ScalarProperty Name="GrupId" ColumnName="GrupId" />
+                <ScalarProperty Name="GrupAdi" ColumnName="GrupAdi" />
+                <ScalarProperty Name="Hakkinda" ColumnName="Hakkinda" />
+                <ScalarProperty Name="GrupResim" ColumnName="GrupResim" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GrupUye">
+            <EntityTypeMapping TypeName="DBModel.GrupUye">
+              <MappingFragment StoreEntitySet="GrupUye">
+                <ScalarProperty Name="UyeId" ColumnName="UyeId" />
+                <ScalarProperty Name="KullaniciId" ColumnName="KullaniciId" />
+                <ScalarProperty Name="GrupId" ColumnName="GrupId" />
+                <ScalarProperty Name="UyeYetki" ColumnName="UyeYetki" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kullanici">
+            <EntityTypeMapping TypeName="DBModel.Kullanici">
+              <MappingFragment StoreEntitySet="Kullanici">
+                <ScalarProperty Name="KullaniciId" ColumnName="KullaniciId" />
+                <ScalarProperty Name="KullaniciAdi" ColumnName="KullaniciAdi" />
+                <ScalarProperty Name="Resim" ColumnName="Resim" />
+                <ScalarProperty Name="Numara" ColumnName="Numara" />
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="KayitTarihi" ColumnName="KayitTarihi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mesaj">
+            <EntityTypeMapping TypeName="DBModel.Mesaj">
+              <MappingFragment StoreEntitySet="Mesaj">
+                <ScalarProperty Name="MesajId" ColumnName="MesajId" />
+                <ScalarProperty Name="İcerik" ColumnName="İcerik" />
+                <ScalarProperty Name="GonderenId" ColumnName="GonderenId" />
+                <ScalarProperty Name="GrupId" ColumnName="GrupId" />
+                <ScalarProperty Name="Tarih" ColumnName="Tarih" />
+                <ScalarProperty Name="Okunma" ColumnName="Okunma" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

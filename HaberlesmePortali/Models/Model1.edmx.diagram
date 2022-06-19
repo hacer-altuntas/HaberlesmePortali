@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="bb310a91df2a42fdac8b909866701d58" Name="Diagram1">
+        <EntityTypeShape EntityType="DBModel.Alicilar" Width="1.5" PointX="4.125" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBModel.Grup" Width="1.5" PointX="5.25" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBModel.GrupUye" Width="1.5" PointX="3" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBModel.Kullanici" Width="1.5" PointX="0.875" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBModel.Mesaj" Width="1.5" PointX="7.25" PointY="0.625" IsExpanded="true" />
+        <AssociationConnector Association="DBModel.FK_Alicilar_mesaj" ManuallyRouted="false" />
+        <AssociationConnector Association="DBModel.FK_Table_alicilar" ManuallyRouted="false" />
+        <AssociationConnector Association="DBModel.FK_GrupUye_Grup" ManuallyRouted="false" />
+        <AssociationConnector Association="DBModel.FK_Mesaj_Grup" ManuallyRouted="false" />
+        <AssociationConnector Association="DBModel.FK_GrupUye_UyeKullanici" ManuallyRouted="false" />
+        <AssociationConnector Association="DBModel.FK_Mesaj_Gonderen" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
